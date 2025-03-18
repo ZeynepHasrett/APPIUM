@@ -32,23 +32,30 @@ public class Driver {
 
         if (appiumDriver == null) {
 
-            DesiredCapabilities caps =new DesiredCapabilities();
-            caps.setCapability(MobileCapabilityType.DEVICE_NAME, TELEFONADI);
-            caps.setCapability(MobileCapabilityType.PLATFORM_VERSION, ANDROIDVERSION);
-            caps.setCapability(MobileCapabilityType.PLATFORM_NAME, PLATFORM);
-            caps.setCapability(MobileCapabilityType.AUTOMATION_NAME, OTOMASYON_ISMI);
-            caps.setCapability("appPackage",ConfigReader.getProperty("kiwiAppPackage"));
-            caps.setCapability("appActivity",ConfigReader.getProperty("kiwiAppActivity"));
+            DesiredCapabilities capabilities =new DesiredCapabilities();
+            capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, TELEFONADI);
+            capabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION, ANDROIDVERSION);
+            capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, PLATFORM);
+            capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, OTOMASYON_ISMI);
+            capabilities.setCapability("appPackage",ConfigReader.getProperty("allCurrencyPackage"));
+            capabilities.setCapability("appActivity",ConfigReader.getProperty("allCurrencyActivity"));
+            capabilities.setCapability(MobileCapabilityType.NO_RESET, false);
+            // Eger bu capability FALSE olarak kullanilirsa,
+            // uygulama test edildikten sonra her seferinde kullanici datalari temizlenir ve
+            // uygulamanin ilk install haline dondurulur.
+
+            // Eger true olursa kullanici bilgileri test bittikten sonra sifirlanmaz ve
+            // tercihler kaydedilir. Islemlere kaldiginiz yerden devam edilir.
 
             if (ConfigReader.getProperty("platformName").equals("Android")) {
 
                 assert appiumServerURL != null;
-                appiumDriver = new AndroidDriver<AndroidElement>(appiumServerURL, caps);
+                appiumDriver = new AndroidDriver<AndroidElement>(appiumServerURL, capabilities);
                 appiumDriver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
             }else {
 
                 assert appiumServerURL != null;
-                iosDriver = new IOSDriver<IOSElement>(appiumServerURL, caps);
+                iosDriver = new IOSDriver<IOSElement>(appiumServerURL, capabilities);
                 iosDriver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
 
                 throw new UnsupportedOperationException("Cihaz IOS");
